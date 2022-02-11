@@ -1,0 +1,637 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": "-- Grafana --",
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 1,
+    "iteration": 1644582365622,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "axisSoftMin": 0,
+                        "fillOpacity": 80,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineWidth": 1
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 17,
+                "x": 0,
+                "y": 0
+            },
+            "id": 8,
+            "options": {
+                "barWidth": 0.97,
+                "groupWidth": 0.7,
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "orientation": "auto",
+                "showValue": "auto",
+                "stacking": "none",
+                "tooltip": {
+                    "mode": "single"
+                },
+                "xTickLabelRotation": 0
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "Rl15Oaanz"
+                    },
+                    "format": "table",
+                    "group": [],
+                    "metricColumn": "none",
+                    "rawQuery": true,
+                    "rawSql": "SELECT\n  per_week as \"week\",\n  sum(total) as \"total\",\n  sum(require_unit_test) as \"required\",\n  sum(with_unit) as \"actual\"\nFROM public.track_commits\nWHERE repo = '${repo:raw}'\n  AND branch = '${branch:raw}'\n  AND per_quarter = '${per_quarter:raw}'\nGROUP BY per_week\nORDER BY per_week ASC\n",
+                    "refId": "A",
+                    "select": [
+                        [
+                            {
+                                "params": ["value"],
+                                "type": "column"
+                            }
+                        ]
+                    ],
+                    "timeColumn": "time",
+                    "where": [
+                        {
+                            "name": "$__timeFilter",
+                            "params": [],
+                            "type": "macro"
+                        }
+                    ]
+                }
+            ],
+            "title": "Number of Commits and Unit Tests Per Week in ${per_quarter} Quarter",
+            "type": "barchart"
+        },
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "semi-dark-red",
+                                "value": null
+                            },
+                            {
+                                "color": "light-red",
+                                "value": 50
+                            },
+                            {
+                                "color": "light-orange",
+                                "value": 60
+                            },
+                            {
+                                "color": "dark-green",
+                                "value": 75
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 7,
+                "x": 17,
+                "y": 0
+            },
+            "id": 6,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "/^actual$/",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true
+            },
+            "pluginVersion": "8.3.5",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "Rl15Oaanz"
+                    },
+                    "format": "table",
+                    "group": [],
+                    "hide": false,
+                    "metricColumn": "none",
+                    "rawQuery": true,
+                    "rawSql": "SELECT\n  avg(with_unit) as \"actual\"\nFROM track_commits\nWHERE\n  require_unit_test > 0\n  AND repo = '${repo:raw}'\n  AND branch = '${branch:raw}'\n  AND per_quarter = '${per_quarter:raw}'\n",
+                    "refId": "A",
+                    "select": [
+                        [
+                            {
+                                "params": ["value"],
+                                "type": "column"
+                            }
+                        ]
+                    ],
+                    "timeColumn": "time",
+                    "where": [
+                        {
+                            "name": "$__timeFilter",
+                            "params": [],
+                            "type": "macro"
+                        }
+                    ]
+                }
+            ],
+            "title": "Percentage of Commits that Required Unit Test in ${per_quarter} Quarter",
+            "type": "gauge"
+        },
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "fixedColor": "yellow",
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "axisSoftMin": 0,
+                        "fillOpacity": 52,
+                        "gradientMode": "scheme",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineWidth": 1
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "semi-dark-red",
+                                "value": null
+                            },
+                            {
+                                "color": "light-red",
+                                "value": 50
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 60
+                            },
+                            {
+                                "color": "semi-dark-green",
+                                "value": 75
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 14,
+                "w": 12,
+                "x": 0,
+                "y": 8
+            },
+            "id": 4,
+            "options": {
+                "barWidth": 0.26,
+                "groupWidth": 0.7,
+                "legend": {
+                    "calcs": ["last"],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "orientation": "vertical",
+                "showValue": "never",
+                "stacking": "none",
+                "text": {
+                    "valueSize": 30
+                },
+                "tooltip": {
+                    "mode": "single"
+                },
+                "xTickLabelRotation": -45
+            },
+            "pluginVersion": "8.3.5",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "Rl15Oaanz"
+                    },
+                    "format": "table",
+                    "group": [
+                        {
+                            "params": ["per_month"],
+                            "type": "column"
+                        }
+                    ],
+                    "metricColumn": "repo",
+                    "rawQuery": true,
+                    "rawSql": "SELECT\n  per_quarter as \"quarter\",\n  avg(with_unit) as \"actual\"\nFROM public.track_commits\nWHERE require_unit_test > 0\n  AND repo = '${repo:raw}'\n  AND branch = '${branch:raw}'\nGROUP BY per_quarter\nORDER BY per_quarter",
+                    "refId": "A",
+                    "select": [
+                        [
+                            {
+                                "params": ["with_unit"],
+                                "type": "column"
+                            },
+                            {
+                                "params": ["avg"],
+                                "type": "aggregate"
+                            },
+                            {
+                                "params": ["rate"],
+                                "type": "alias"
+                            }
+                        ]
+                    ],
+                    "table": "track_commits",
+                    "timeColumn": "formatted_committed_at",
+                    "timeColumnType": "timestamptz",
+                    "where": [
+                        {
+                            "name": "$__timeFilter",
+                            "params": [],
+                            "type": "macro"
+                        },
+                        {
+                            "datatype": "int4",
+                            "name": "",
+                            "params": ["require_unit_test", ">", "0"],
+                            "type": "expression"
+                        }
+                    ]
+                }
+            ],
+            "title": "Percentage of Commits that Required Unit Test (All)",
+            "type": "barchart"
+        },
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "axisSoftMin": 0,
+                        "fillOpacity": 80,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineWidth": 1
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 14,
+                "w": 12,
+                "x": 12,
+                "y": 8
+            },
+            "id": 2,
+            "options": {
+                "barWidth": 0.97,
+                "groupWidth": 0.7,
+                "legend": {
+                    "calcs": ["last"],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "orientation": "auto",
+                "showValue": "always",
+                "stacking": "none",
+                "tooltip": {
+                    "mode": "single"
+                },
+                "xTickLabelRotation": -45
+            },
+            "pluginVersion": "8.3.5",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "Rl15Oaanz"
+                    },
+                    "format": "table",
+                    "group": [],
+                    "metricColumn": "none",
+                    "rawQuery": true,
+                    "rawSql": "SELECT\n  per_quarter as \"quarter\",\n  sum(total) as \"total\",\n  sum(require_unit_test) as \"required\",\n  sum(with_unit) as \"actual\"\nFROM public.track_commits\nWHERE\n  repo = '${repo:raw}'\n  AND branch = '${branch:raw}'\nGROUP BY per_quarter\nORDER BY per_quarter ASC\n",
+                    "refId": "A",
+                    "select": [
+                        [
+                            {
+                                "params": ["value"],
+                                "type": "column"
+                            }
+                        ]
+                    ],
+                    "timeColumn": "time",
+                    "where": [
+                        {
+                            "name": "$__timeFilter",
+                            "params": [],
+                            "type": "macro"
+                        }
+                    ]
+                }
+            ],
+            "title": "Number of Commits and Unit Tests Per Quarter (All)",
+            "type": "barchart"
+        },
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "fixedColor": "yellow",
+                        "mode": "thresholds"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "axisSoftMin": 0,
+                        "fillOpacity": 52,
+                        "gradientMode": "scheme",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineWidth": 1
+                    },
+                    "mappings": [],
+                    "max": 1,
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "semi-dark-red",
+                                "value": null
+                            },
+                            {
+                                "color": "light-red",
+                                "value": 50
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 60
+                            },
+                            {
+                                "color": "semi-dark-green",
+                                "value": 75
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 14,
+                "w": 12,
+                "x": 0,
+                "y": 22
+            },
+            "id": 10,
+            "options": {
+                "barWidth": 0.26,
+                "groupWidth": 0.7,
+                "legend": {
+                    "calcs": ["last"],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "orientation": "vertical",
+                "showValue": "never",
+                "stacking": "none",
+                "text": {
+                    "valueSize": 30
+                },
+                "tooltip": {
+                    "mode": "single"
+                },
+                "xTickLabelRotation": -45
+            },
+            "pluginVersion": "8.3.5",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "postgres",
+                        "uid": "Rl15Oaanz"
+                    },
+                    "format": "table",
+                    "group": [
+                        {
+                            "params": ["per_month"],
+                            "type": "column"
+                        }
+                    ],
+                    "metricColumn": "repo",
+                    "rawQuery": true,
+                    "rawSql": "SELECT\n  per_quarter as \"quarter\",\n  avg(with_test) as \"actual\"\nFROM public.track_commits\nWHERE require_unit_test > 0\n  AND repo = '${repo:raw}'\n  AND branch = '${branch:raw}'\nGROUP BY per_quarter\nORDER BY per_quarter",
+                    "refId": "A",
+                    "select": [
+                        [
+                            {
+                                "params": ["with_unit"],
+                                "type": "column"
+                            },
+                            {
+                                "params": ["avg"],
+                                "type": "aggregate"
+                            },
+                            {
+                                "params": ["rate"],
+                                "type": "alias"
+                            }
+                        ]
+                    ],
+                    "table": "track_commits",
+                    "timeColumn": "formatted_committed_at",
+                    "timeColumnType": "timestamptz",
+                    "where": [
+                        {
+                            "name": "$__timeFilter",
+                            "params": [],
+                            "type": "macro"
+                        },
+                        {
+                            "datatype": "int4",
+                            "name": "",
+                            "params": ["require_unit_test", ">", "0"],
+                            "type": "expression"
+                        }
+                    ]
+                }
+            ],
+            "title": "Percentage of Commits that Required Unit Test (including with E2E) (All)",
+            "type": "barchart"
+        }
+    ],
+    "refresh": false,
+    "schemaVersion": 34,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": true,
+                    "text": "customer-web-server",
+                    "value": "customer-web-server"
+                },
+                "definition": "select distinct(repo) from track_commits",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Repo",
+                "multi": false,
+                "name": "repo",
+                "options": [],
+                "query": "select distinct(repo) from track_commits",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "master",
+                    "value": "master"
+                },
+                "definition": "select distinct(branch) from track_commits where repo='$repo' ",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Branch",
+                "multi": false,
+                "name": "branch",
+                "options": [],
+                "query": "select distinct(branch) from track_commits where repo='$repo' ",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "type": "query"
+            },
+            {
+                "current": {
+                    "selected": false,
+                    "text": "2022-1",
+                    "value": "2022-1"
+                },
+                "definition": "select distinct(per_quarter) from track_commits where repo='$repo' and branch='$branch' order by per_quarter desc",
+                "hide": 0,
+                "includeAll": false,
+                "label": "Per quarter",
+                "multi": false,
+                "name": "per_quarter",
+                "options": [],
+                "query": "select distinct(per_quarter) from track_commits where repo='$repo' and branch='$branch' order by per_quarter desc",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 2,
+                "type": "query"
+            }
+        ]
+    },
+    "time": {
+        "from": "2022-02-11T09:59:53.482Z",
+        "to": "2022-02-11T11:59:53.482Z"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Unit / Component / Integration Tracking",
+    "uid": "VOSYa-anz",
+    "version": 32,
+    "weekStart": ""
+}

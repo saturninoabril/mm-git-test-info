@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+    db:
+        image: postgres:13.3
+        restart: always
+        environment:
+            POSTGRES_USER: change_user
+            POSTGRES_PASSWORD: change_passwd
+            POSTGRES_DB: change_db
+        command: postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+        volumes:
+            - './postgres.conf:/etc/postgresql/postgresql.conf'
+        ports:
+            - 5432:5432
+
+    adminer:
+        image: adminer:4.8.1
+        restart: always
+        ports:
+            - 8080:8080
+
+    grafana:
+        image: grafana/grafana-oss:8.5.0-51022pre
+        restart: always
+        ports:
+            - 3000:3000

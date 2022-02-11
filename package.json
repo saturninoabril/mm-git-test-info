@@ -1,0 +1,27 @@
+{
+    "name": "mm-git-test-info",
+    "version": "0.0.1",
+    "description": "Use to get commits data and test info from git",
+    "author": "Saturnino Abril",
+    "scripts": {
+        "format": "npx prettier --single-quote --trailing-comma all --print-width 120 --tab-width 4 --no-bracket-spacing --write .",
+        "lint": "npx next lint",
+        "migrate:make": "knex migrate:make",
+        "migrate:latest": "knex migrate:latest",
+        "migrate:up": "knex migrate:up",
+        "migrate:down": "knex migrate:down",
+        "migrate:status": "knex migrate:status"
+    },
+    "dependencies": {
+        "@next/env": "12.0.10",
+        "dayjs": "1.10.7",
+        "fs-extra": "10.0.0",
+        "knex": "1.0.2",
+        "pg": "8.7.3",
+        "yargs": "17.3.1"
+    },
+    "devDependencies": {
+        "eslint": "8.8.0",
+        "eslint-config-next": "12.0.10"
+    }
+}

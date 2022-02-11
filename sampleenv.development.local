@@ -1,0 +1,7 @@
+PG_DB_CONNECTION=postgres://change_user:change_passwd@localhost:5432/change_db?sslmode=disable&connect_timeout=10
+
+WORK_DIR=/change/working/dir
+REPO=change-repo
+BRANCH=change-branch
+
+PERIOD=week
